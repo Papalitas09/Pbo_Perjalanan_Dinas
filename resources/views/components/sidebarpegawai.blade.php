@@ -4,7 +4,7 @@
         <!-- Profile Admin -->
         <div class="flex items-center bg-emerald-900 p-3">
             <div class="w-10 h-10 bg-gray-300 rounded-full"></div>
-            <span class="ml-2 text-white font-medium">Nama Admin</span>
+            <span class="ml-2 text-white font-medium">Pegawai</span>
         </div>
 
         <!-- Logo -->

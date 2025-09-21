@@ -59,7 +59,7 @@
                 Riwayat Perjalanan
             </h3>
             <div class="bg-white rounded-lg h-48 flex items-center justify-center">
-                <h2 class="text-black">{{}}</h2>
+                <h2 class="text-black">1</h2>
             </div>
         </div>
 @endsection

@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-
+use App\Models\CatatanDinas;
+use Illuminate\Support\Facades\Auth;
 use App\Models\pegawai;
 use Illuminate\Http\Request;
 
@@ -17,6 +18,11 @@ class chartController extends Controller
         $labels = $chart->keys();
         $totals = $chart->values();
 
-        return view('admin.dahsboard', compact('labels', 'totals'));
+        $pegawai = Auth::guard('pegawai')->user();
+
+        $data = CatatanDinas::where('status_tampil', 'Tertunda')->whereHas('pegawai', function ($q) {
+        $q->where('role', 'pegawai');})->get();
+
+        return view('Admin.dahsboard', compact('labels', 'totals', 'data'));
     }
 }

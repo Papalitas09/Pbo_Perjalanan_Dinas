@@ -74,7 +74,7 @@
                 Jumlah Pegawai
             </h3>
             <div class="bg-white rounded-lg h-48 flex items-center justify-center">
-                <canvas id="pegawaiChart"></canvas>
+                <canvas id="pegawaiChart">{{$totals}}</canvas>
             </div>
         </div>
 
