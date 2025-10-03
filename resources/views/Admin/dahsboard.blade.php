@@ -109,14 +109,14 @@
         }
     });
 
-    async function fetchPegawaiData() {
-        const response = await fetch('/api/employees/count');
-        const data = await response.json();
+    // async function fetchPegawaiData() {
+    //     const response = await fetch('/api/employees/count');
+    //     const data = await response.json();
 
-        pegawaiChart.data.labels = data.labels;
-        pegawaiChart.data.datasets[0].data = data.values;
-        pegawaiChart.update();
-    }
+    //     pegawaiChart.data.labels = data.labels;
+    //     pegawaiChart.data.datasets[0].data = data.values;
+    //     pegawaiChart.update();
+    // }
 
     fetchPegawaiData();
 </script>
