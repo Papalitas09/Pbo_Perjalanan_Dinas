@@ -15,6 +15,9 @@ class admin extends Controller
 
         $data = CatatanDinas::where('status_tampil', 'Tertunda')->whereHas('pegawai', function ($q) {
         $q->where('role', 'pegawai');})->get();
-        return view('Admin.dahsboard', compact('data'));
+
+        $jumlahpegawai = Pegawai::where('role', 'pegawai')->count();
+        $jumlahcatatan = CatatanDinas::count();
+        return view('Admin.dahsboard', compact('data', 'jumlahpegawai', 'jumlahcatatan'));
     }
 }

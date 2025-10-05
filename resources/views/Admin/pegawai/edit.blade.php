@@ -7,30 +7,49 @@
     <form action="{{ route('admin.pegawai.update', $pegawai->id) }}" method="POST" class="space-y-4">
         @csrf
         @method('PUT')
-        <div>
-            <label class="block font-semibold">Nama Pegawai</label>
-            <input type="text" name="nama" class="w-full border rounded-lg px-3 py-2" value="{{ $pegawai->nama }}">
-        </div>
+        @if ($errors->any())
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+<div>
+    <label for="nama" class="block text-gray-700 font-semibold mb-2">Nama Pegawai</label>
+    <input type="text" name="nama" id="nama"
+        class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-emerald-500"
+        placeholder="Contoh: Ilham Sipahutar" required value="{{ $pegawai->nama }}">
+            </div>
 
-        <div>
-            <label class="block font-semibold">password</label>
-            <input type="password" name="password" class="w-full border rounded-lg px-3 py-2" required>
-        </div>
-        <div>
-            <label class="block font-semibold">Email</label>
-            <input type="email" name="email" class="w-full border rounded-lg px-3 py-2" required value="{{ $pegawai->email }}">
-        </div>
+            <div>
+                <label for="password" class="block text-gray-700 font-semibold mb-2">Password</label>
+                <input type="password" name="password" id="password"
+                    class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-emerald-500"
+                    placeholder="Password pegawai" value="{{ $pegawai->password }}">
+            </div>
 
-        <div>
-            <label class="block font-semibold">NIP</label>
-            <input type="text" name="no_induk" class="w-full border rounded-lg px-3 py-2" required value="{{ $pegawai->no_induk }}">
-        </div>
+            <div>
+                <label for="email" class="block text-gray-700 font-semibold mb-2">Email</label>
+                <input type="email" name="email" id="email"
+                    class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-emerald-500"
+                    placeholder="email@example.com" required value="{{ $pegawai->email }}">
+            </div>
 
-        <div>
-            <label class="block font-semibold">No Telepon</label>
-            <input type="text" name="no_telepon" class="w-full border rounded-lg px-3 py-2" required value="{{ $pegawai->no_telepon }}">
-        </div>
+            <div>
+                <label for="no_induk" class="block text-gray-700 font-semibold mb-2">Nomor Induk</label>
+                <input type="text" name="no_induk" id="no_induk"
+                    class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-emerald-500"
+                    placeholder="Contoh: 2100038392" required value="{{ $pegawai->no_induk }}">
+            </div>
 
+            <div>
+                <label for="no_telepon" class="block text-gray-700 font-semibold mb-2">Nomor Telepon</label>
+                <input type="text" name="no_telepon" id="no_telepon"
+                    class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-emerald-500"
+                    placeholder="Contoh: 08571952772" required value="{{ $pegawai->no_telepon }}">
+            </div>
         <div class="flex justify-between items-center mt-6">
             <a href="{{ route('admin.pegawai.index') }}" class="text-emerald-600 hover:underline">← Back</a>
             <button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2 rounded-lg">

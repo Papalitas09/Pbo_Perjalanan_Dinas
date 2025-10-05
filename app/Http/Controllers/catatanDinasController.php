@@ -24,7 +24,6 @@ class catatanDinasController extends Controller
 
             $data = CatatanDinas::whereHas('pegawai', function ($q) {$q->where('role', 'pegawai');})->get();
 
-
             return view('Admin.catatan.index' ,compact('data'));
         }
     }
@@ -34,7 +33,12 @@ class catatanDinasController extends Controller
      */
     public function create()
     {
-        return view('pegawai.CatatanDinas.create');
+        if(Auth::guard('pegawai')->check() && Auth::guard('pegawai')->user()->role === 'admin'){
+            $datapegawai = Pegawai::where('role', 'pegawai')->orderBy('nama')->get();
+            return view('Admin.catatan.create', compact('datapegawai'));
+        } else {
+            return view('pegawai.CatatanDinas.create');
+        }
     }
 
     /**
@@ -42,17 +46,53 @@ class catatanDinasController extends Controller
      */
     public function store(Request $request)
     {
-        $pegawai = Auth::guard('pegawai')->user();
-        CatatanDinas::create(([
-            'no_induk' => $pegawai->no_induk, // FK ke pegawai
-            'lokasi' => $request->lokasi,
-            'tanggal_berangkat' => $request->tanggal_berangkat,
-            'tanggal_pulang' => $request->tanggal_pulang,
-            'status' => $request->status,
-            'catatan_lainnya' => $request->catatan_lainnya,
-            'status_tampil' => 'Tertunda',
-        ]));
-        return redirect()->route('pegawai.catatan.index');
+        // dd($request->all());
+        if(Auth::guard('pegawai')->check() && Auth::guard('pegawai')->user()->role === 'admin'){
+             $request->validate([
+                'no_induk' => 'required|exists:pegawai,no_induk',
+                'lokasi' => 'required|string|max:255',
+                'tanggal_berangkat' => 'required|date',
+                'tanggal_pulang' => 'required|date|after_or_equal:tanggal_berangkat',
+                'status' => 'nullable',
+                'status_tampil' => 'nullable',
+                'catatan_lainnya' => 'nullable|string',
+            ]);
+            
+
+            CatatanDinas::create([
+                'no_induk' => $request->no_induk, // ← ini yang dikirim dari select
+                'lokasi' => $request->lokasi,
+                'tanggal_berangkat' => $request->tanggal_berangkat,
+                'tanggal_pulang' => $request->tanggal_pulang,
+                'status' => $request->status,
+                'status_tampil' => $request->status_tampil,
+                'catatan_lainnya' => $request->catatan_lainnya,
+            ]);
+            
+            return redirect()->route('admin.catatan.index')->with('success', 'Perjalanan dinas berhasil dibuat!');
+        } 
+        else {
+            $pegawai = Auth::guard('pegawai')->user();
+            // dd($pegawai->role); // Lihat apa yang keluar
+            $request->validate([
+                'lokasi' => 'required|string|max:255',
+                'tanggal_berangkat' => 'required|date',
+                'tanggal_pulang' => 'required|date|after_or_equal:tanggal_berangkat',
+                'catatan_lainnya' => 'nullable|string',
+            ]);
+
+            CatatanDinas::create([
+                'no_induk' => $pegawai->no_induk,
+                'lokasi' => $request->lokasi,
+                'tanggal_berangkat' => $request->tanggal_berangkat,
+                'tanggal_pulang' => $request->tanggal_pulang,
+                'status' => 'Belum Berlangsung', // ← SET DEFAULT
+                'catatan_lainnya' => $request->catatan_lainnya,
+                'status_tampil' => 'Tertunda', // ← SET DEFAULT
+            ]);
+            return redirect()->route('pegawai.catatan.index');
+        }
+       
     }
 
     /**
@@ -69,9 +109,9 @@ class catatanDinasController extends Controller
     public function edit(String $id)
     {
         $catatan = CatatanDinas::findOrFail($id);
-        $pegawai = pegawai::all();
+        $datapegawai = Pegawai::where('role', 'pegawai')->get();
         // dd($catatan);
-        return view("Admin.catatan.edit", compact('catatan', 'pegawai'));
+        return view("Admin.catatan.edit", compact('catatan',  'datapegawai'));
         
     }
 
@@ -82,7 +122,26 @@ class catatanDinasController extends Controller
     public function update(Request $request, String $id)
     {
         $catatan = CatatanDinas::findOrFail($id);
-        $catatan->update($request->all());
+        // dd($request->all());
+        $request->validate([
+        'no_induk' => 'required|exists:pegawai,no_induk',
+        'lokasi' => 'required|string|max:255',
+        'tanggal_berangkat' => 'required|date',
+        'tanggal_pulang' => 'required|date|after_or_equal:tanggal_berangkat',
+        'status' => 'required|in:Belum Berlangsung,Berlangsung,Selesai',
+        'status_tampil' => 'required|in:Tertunda,Disetujui,Ditolak',
+        'catatan_lainnya' => 'nullable|string',
+    ]);
+
+    $catatan->update([
+        'no_induk' => $request->no_induk,
+        'lokasi' => $request->lokasi,
+        'tanggal_berangkat' => $request->tanggal_berangkat,
+        'tanggal_pulang' => $request->tanggal_pulang,
+        'status' => $request->status,
+        'status_tampil' => $request->status_tampil,
+        'catatan_lainnya' => $request->catatan_lainnya,
+    ]);
 
         return redirect()->route('admin.catatan.index')
         ->with('success', 'Data berhasil diperbarui!');

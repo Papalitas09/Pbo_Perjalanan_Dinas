@@ -1,35 +1,102 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="p-6 bg-gray-300 min-h-screen shadow-xl rounded-xl">
-    <h1 class="text-2xl font-bold mb-6">Tambah Perjalanan baru</h1>
+<div class="p-6 bg-white border border-gray-300 w-full max-h-[800px] shadow-xl rounded-xl">
+    <h1 class="text-3xl font-bold text-emerald-700 mb-8 text-center">
+        Tambah Perjalanan Dinas Baru
+    </h1>
 
-    <form action="{{ route('pegawai.catatan.store') }}" method="POST" class="space-y-4">
+@if ($errors->any())
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+    <form action="{{ route('admin.catatan.store') }}" method="POST" class="space-y-6">
         @csrf
+
+        {{-- Pilih Pegawai --}}
         <div>
-            <label class="block font-semibold">Lokasi</label>
-            <input type="text" name="lokasi" class="w-full border rounded-lg px-3 py-2" required>
+            <label for="pegawai_id" class="block text-gray-700 font-semibold mb-2">
+                Pegawai yang Dinas
+            </label>
+            <select name="no_induk" id="pegawai_id" required
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-emerald-500">
+                <option value="">-- Pilih Pegawai --</option>
+                @foreach($datapegawai as $pegawai)
+                    <option value="{{ $pegawai->no_induk }}">{{ $pegawai->nama }} ({{ $pegawai->no_induk }})</option>
+                @endforeach
+            </select>
         </div>
 
+        {{-- Lokasi --}}
         <div>
-            <label class="block font-semibold">Tanggal Berangkat</label>
-            <input type="date" name="tanggal_berangkat" class="w-full border rounded-lg px-3 py-2" required>
+            <label for="lokasi" class="block text-gray-700 font-semibold mb-2">Lokasi Tujuan</label>
+            <input type="text" name="lokasi" id="lokasi"
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-emerald-500"
+                placeholder="Contoh: Jakarta, Bandung, atau Surabaya" required>
         </div>
 
-        <div>
-            <label class="block font-semibold">Tanggal Pulang</label>
-            <input type="date" name="tanggal_pulang" class="w-full border rounded-lg px-3 py-2" required>
+        {{-- Tanggal Berangkat & Pulang --}}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <label for="tanggal_berangkat" class="block text-gray-700 font-semibold mb-2">
+                    Tanggal Berangkat
+                </label>
+                <input type="date" name="tanggal_berangkat" id="tanggal_berangkat"
+                    class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-emerald-500"
+                    required>
+            </div>
+            <div>
+                <label for="tanggal_pulang" class="block text-gray-700 font-semibold mb-2">
+                    Tanggal Pulang
+                </label>
+                <input type="date" name="tanggal_pulang" id="tanggal_pulang"
+                    class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-emerald-500"
+                    required>
+            </div>
         </div>
 
+        {{-- Catatan Lainnya --}}
         <div>
-            <label class="block font-semibold">Status</label>
-            <input type="text" name="no_telepon" class="w-full border rounded-lg px-3 py-2" required>
+            <label for="catatan_lainnya" class="block text-gray-700 font-semibold mb-2">Catatan Lainnya</label>
+            <textarea name="catatan_lainnya" id="catatan_lainnya" rows="3"
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-emerald-500"
+                placeholder="Masukkan catatan tambahan (opsional)..."></textarea>
         </div>
 
-        <div class="flex justify-between items-center mt-6">
-            <a href="{{ route('admin.catatan.index') }}" class="text-emerald-600 hover:underline">← Back</a>
-            <button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2 rounded-lg" href="{{ route('admin.catatan.index') }}">
-                SUBMIT
+        {{-- Status --}}
+        <div>
+            <label for="status" class="block text-gray-700 font-semibold mb-2">Status</label>
+            <select name="status" id="status"
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-emerald-500">
+                <option value="Belum Berlangsung">Belum Berlangsung</option>
+                <option value="Berlangsung">Berlangsung</option>
+                <option value="Selesai">Selesai</option>
+            </select>
+        </div>
+        <div>
+            <label for="status_tampil" class="block text-gray-700 font-semibold mb-2">Status Tampil</label>
+            <select name="status_tampil" id="status"
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-emerald-500">
+                    <option value="Tertunda">Tertunda</option>
+                    <option value="Disetujui">Disetujui</option>
+                    <option value="Ditolak">Ditolak</option>
+            </select>
+        </div>
+
+        {{-- Tombol Aksi --}}
+        <div class="flex justify-between items-center pt-6 border-t border-gray-200">
+            <a href="{{ route('admin.catatan.index') }}"
+                class="text-emerald-600 hover:underline font-semibold flex items-center gap-1">
+                ← Kembali
+            </a>
+            <button type="submit"
+                class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-8 py-2 rounded-lg shadow-md transition">
+                Simpan
             </button>
         </div>
     </form>

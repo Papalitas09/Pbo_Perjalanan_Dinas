@@ -20,7 +20,7 @@ class catatandinasSeed extends Seeder
                 'lokasi' => $faker->address,
                 'tanggal_berangkat' => $faker->date(),
                 'tanggal_pulang' => $faker->date(),
-                'no_induk'  => pegawai::inRandomOrder()->first()->no_induk,
+                'no_induk'  => pegawai::where('role', 'pegawai')->inRandomOrder()->first()->no_induk,
                 'status' => $faker->randomElement(['Belum Berlangsung', 'Berlangsung',  'Selesai']),
                 'catatan_lainnya' => 'kurang tau apa',
                 'status_tampil' => $faker->randomElement(['Tertunda', 'Disetujui',  'Ditolak'])

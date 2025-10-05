@@ -1,12 +1,20 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="p-6 bg-white shadow-xs rounded-xl w-full border-2">
-    <h1 class="text-2xl font-bold mb-6">Daftar Pegawai</h1>
+<div class="bg-white border border-gray-300 border-collapse w-full shadow-xl rounded-xl p-5">
+    <h1 class="text-4xl font-bold mb-6">Data Catatan Dinas</h1>
 
+    <div class="mb-4 flex gap-2">
+        <a href="{{ route('admin.catatan.create') }}" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2 px-4 rounded-lg">
+            <i class="fas fa-user-plus"></i> 📒 Create Catatan
+        </a>
+        <a href="{{ url('/export/RCT') }}" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2 px-4 rounded-lg">
+            <i class="fas fa-user-plus"></i> 📤 Export Data
+        </a>
+    </div>
     <!-- Tabel Pegawai -->
-    <div class=" bg-white shadow-md rounded-lg overflow-x-auto overflow-y-auto max-h-[650px]">
-        <table class="min-w-full border-collapse border border-black">
+    <div class=" bg-white shadow-md rounded-lg overflow-x-auto overflow-y-auto max-h-[500px]">
+        <table class="min-w-full border-collapse border border-gray-200">
             <thead>
                 <tr class="bg-emerald-400 text-white">
                     <th class="px-4 py-2 border">NO</th>

@@ -2,17 +2,17 @@
 
 @section('content')
 <div class="p-6 bg-white border border-gray-300 border-collapse w-full shadow-xl rounded-xl">
-    <h1 class="text-2xl font-bold mb-6">Daftar Pegawai</h1>
+    <h1 class="text-4xl font-bold mb-6">Daftar Pegawai</h1>
 
     <!-- Tombol Create -->
     <div class="mb-4">
         <a href="{{ route('admin.pegawai.create') }}" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2 px-4 rounded-lg">
-            <i class="fas fa-user-plus"></i> Create Pegawai
+            <i class="fas fa-user-plus"></i>👤 Create Pegawai
         </a>
     </div>
-
+    
     <!-- Tabel Pegawai -->
-    <div class="bg-white shadow-md rounded-lg overflow-x-auto overflow-y-auto max-h-[600px] flex flex-col space-y-3">
+    <div class="bg-white shadow-md rounded-lg overflow-x-auto overflow-y-auto max-h-[500px] flex flex-col space-y-3">
         <table class="min-w-full border-collapse border border-gray-200">
             <thead>
                 <tr class="bg-emerald-400 text-white">

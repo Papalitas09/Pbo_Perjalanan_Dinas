@@ -45,6 +45,7 @@ class PegawaiController extends Controller
             'email' => 'required|email|unique:pegawai,email',
             'no_induk' => 'required|unique:pegawai,no_induk',
             'no_telepon' => 'required|string|max:100',
+            'password' => 'required|string|max:100',
         ]);
 
         Pegawai::create([
@@ -52,7 +53,7 @@ class PegawaiController extends Controller
             'email' => $request->email,
             'no_induk' => $request->no_induk,
             'no_telepon' => $request->no_telepon,
-            'password' => Hash::make('1234'), // default password
+            'password' => bcrypt($request->password), // default password
             'role' => 'pegawai'
         ]);
 
@@ -66,13 +67,21 @@ class PegawaiController extends Controller
         $request->validate([
             'nama' => 'required|string|max:255',
             'email' => 'required|email',
+            'no_induk' => 'required|unique:pegawai,no_induk,' . $id, // tambahkan pengecualian untuk ID saat ini
             'no_telepon' => 'required|string|max:100',
-            'password' => 'required|string|max:100',
+            'password' => 'nullable|string|max:100',
         ]);
 
-        $pegawai->update($request->only(['nama', 'email', 'no_telepon']));
+        $pegawai->fill($request->except('password'));
 
-        return redirect()->route('admin.pegawai.index');
+        if ($request->filled('password')) {
+            $pegawai->password = bcrypt($request->password);
+        }
+
+        $pegawai->save();
+
+        return redirect()->route('admin.pegawai.index')->with('success', 'Data pegawai berhasil diperbarui');
+
     }
 
     public function destroy(String $id)
@@ -89,8 +98,9 @@ class PegawaiController extends Controller
     public function show()
     {
         $pegawai = Auth::guard('pegawai')->user();
+        $riwayat = CatatanDinas::where('no_induk', $pegawai->no_induk)->count();
 
         $data = CatatanDinas::where('no_induk', $pegawai->no_induk)->where('status_tampil', 'Tertunda')->get();
-        return view('pegawai.dashboard', compact('data'));
+        return view('pegawai.dashboard', compact('data', 'riwayat'));
     }
 }

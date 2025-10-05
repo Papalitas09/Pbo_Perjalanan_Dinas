@@ -1,10 +1,14 @@
-<div class="h-screen w-80 bg-teal-400 flex flex-col justify-between">
+<div class="h-auto min-h-screen w-80 bg-emerald-400 flex flex-col justify-between">
     <!-- Bagian atas -->
     <div>
         <!-- Profile Admin -->
         <div class="flex items-center bg-emerald-900 p-3">
-            <div class="w-10 h-10 bg-gray-300 rounded-full"></div>
-            <span class="ml-2 text-white font-medium">Pegawai</span>
+           <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-emerald-500 font-bold">
+            {{ strtoupper(substr(Auth::guard('pegawai')->user()->nama, 0, 1)) }}
+            </div>
+            <span class="ml-2 text-white font-medium">
+                {{ Auth::guard('pegawai')->user()->nama }}
+            </span>
         </div>
 
         <!-- Logo -->
@@ -14,7 +18,7 @@
 
         <!-- Menu -->
         <nav class="flex flex-col space-y-3 px-4">
-            <a href="{{ route('pegawai.dashboard') }}" class="block text-center py-2 rounded-md bg-gray-200 hover:bg-gray-300 transition">
+            <a href="{{ route('pegawai.dashboard') }}" class="block text-center py-2 rounded-md bg-white hover:bg-gray-300 transition">
                 Dashboard
             </a>
             <a href="{{ route('pegawai.catatan.index') }}" class="block text-center py-2 rounded-md bg-white hover:bg-gray-200 transition">

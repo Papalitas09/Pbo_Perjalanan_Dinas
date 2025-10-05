@@ -20,7 +20,7 @@ return new class extends Migration
             $table->foreign('no_induk')->references('no_induk')->on('pegawai')->onDelete('cascade');
             $table->enum('status', ['Belum Berlangsung','Berlangsung', 'Selesai'])->default('Belum Berlangsung');
             $table->enum('status_tampil', ['Tertunda','Disetujui', 'Ditolak'])->default('Tertunda');
-            $table->text('catatan_lainnya');
+            $table->text('catatan_lainnya')->nullable();
             $table->timestamps();
         });
     }
